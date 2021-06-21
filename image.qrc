@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="/imgae">
+    <file>2.png</file>
+    <file>1.png</file>
+    <file>3_heroes_loadingscreen.png</file>
+    <file>jiemian.png</file>
+  </qresource>
+</RCC>

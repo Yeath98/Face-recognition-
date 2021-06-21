@@ -1,0 +1,57 @@
+import itchat
+import os
+import cv2
+
+
+@itchat.msg_register('Text')
+def main(msg):
+    message = msg['Text'].strip()
+    ToUserName = msg['ToUserName']
+    FromUserName = msg['FromUserName']
+    if FromUserName == ToUserName:
+        tip = '输入 on 开启操控 默认是关闭的'
+        itchat.send(tip, 'filehelper')
+    if ToUserName == 'filehelper':
+        control(message)
+
+
+flag = False
+
+
+def control(message):
+    global flag
+    if message == 'on':
+        tip = '现在可以开始操控了    1.输入“关机”\n 2.输入“拍照”'
+        itchat.send(tip, 'filehelper')
+        flag = True
+    if message == 'off':
+        tip = '现在已经操控了    输入 on  打开操控'
+        itchat.send(tip, 'filehelper')
+        flag = False
+    if flag == True:
+        if message == '关机':
+            cmd()
+        elif message == '拍照':
+            img()
+
+
+def cmd():
+    os.system('shutdown /s /t 0')
+
+
+def img():
+    cap = cv2.VideoCapture(0)
+    ret, img = cap.read()
+    filename = 'wechat.jpg'
+    cv2.imwrite(filename, img)
+    cap.release()
+    itchat.send_image(filename, 'filehelper')
+
+
+def main():
+    itchat.auto_login(hotReload=True)
+    itchat.run()
+
+
+if __name__ == '__main__':
+    main()
